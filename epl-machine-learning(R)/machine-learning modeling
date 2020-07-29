@@ -1,0 +1,131 @@
+#download package
+
+install.packages("caret")
+install.packages("rpart")
+install.packages("rpart.plot")
+install.packages("e1071")
+install.packages("randomForest")
+install.packages("gbm")
+install.packages("nnet")
+library(caret)
+library(rpart)
+library(rpart.plot)
+library(e1071)
+library(randomForest)
+library(gbm)
+library(nnet)
+
+#road data
+
+epl_data <- read.csv("epl_match_5seasons.csv")
+
+epl_data$home <- NULL
+epl_data$home_scores <- NULL
+epl_data$away <- NULL
+epl_data$away_scores <- NULL
+epl_data$X <- NULL
+epl_data$result <- as.factor(epl_data$result)
+
+#training/test data set
+
+set.seed(1246)
+index <- createDataPartition(y=epl_data$result,p=0.7,list=F)
+training_epl <- epl_data[index,]
+test_epl <- epl_data[-index,]
+
+nrow(epl_data) # raw data
+nrow(training_epl) #training data
+nrow(test_epl) #test data
+
+
+#full decision tree
+
+tree_epl <- rpart(result~.,data=training_epl)
+rpart.plot(tree_epl) #plotting
+printcp(tree_epl) #analysis summary
+
+#prediction
+
+predict_tree_epl <- predict(tree_epl,newdata=test_epl,type="class")
+true_tree_epl <- test_epl$result
+confusion_tree_epl <- confusionMatrix(predict_tree_epl,true_tree_epl)
+confusion_tree_epl
+
+
+#########################################################################################
+
+#full random forest
+
+set.seed(1246)
+forest_epl <- randomForest(result~.,data=training_epl)
+forest_epl
+plot(forest_epl) #오류감소율
+importance(forest_epl)
+varImpPlot(forest_epl) #변수중요도
+
+#prediction
+predict_forest_epl <- predict(forest_epl,newdata=test_epl,type="response")
+true_forest_epl <- test_epl$result
+confusion_forest_epl <- confusionMatrix(predict_forest_epl,true_forest_epl)
+confusion_forest_epl
+
+##########################################################################################
+
+#gradient boosting model
+
+set.seed(1246)
+gradient_epl <- gbm(result~.,data=training_epl,distribution = "multinomial",n.trees=50000,cv.folds = 3,verbose=TRUE)
+gradient_epl
+
+#prediction
+best_iter <- gbm.perf(gradient_epl,method="cv")
+predict_gradient_epl <- predict(gradient_epl,n.trees=best_iter,newdata=test_epl,type="response")
+
+prediction_gradient_epl <- c()
+
+
+for (i in 1:569)
+{
+  if(max(predict_gradient_epl[i,1,],predict_gradient_epl[i,2,],predict_gradient_epl[i,3,])==predict_gradient_epl[i,1,]) 
+    {prediction_gradient_epl[i]="-1"}
+  if(max(predict_gradient_epl[i,1,],predict_gradient_epl[i,2,],predict_gradient_epl[i,3,])==predict_gradient_epl[i,2,])
+  {prediction_gradient_epl[i]="0"}
+  if(max(predict_gradient_epl[i,1,],predict_gradient_epl[i,2,],predict_gradient_epl[i,3,])==predict_gradient_epl[i,3,])
+  {prediction_gradient_epl[i]="1"}
+}
+
+prediction_gradient_epl <- as.factor(prediction_gradient_epl)
+    
+true_gradient_epl <- test_epl$result
+confusion_gradient_epl <- confusionMatrix(prediction_gradient_epl,true_forest_epl)
+confusion_gradient_epl
+
+####################################################################################################
+
+#full support vector machine
+
+svm_epl <- svm(result~.,data=training_epl)
+summary(svm_epl)
+
+#predict support vector machine
+
+predict_svm_epl <- predict(svm_epl,newdata=test_epl,type="class")
+true_svm <- test_epl$result
+confusion_svm_epl <- confusionMatrix(predict_svm_epl,true_svm_epl)
+confusion_svm_epl
+
+
+##################################################################################################
+
+#full multinomial logistic regression
+
+logit_epl <- multinom(result~.,data=training_epl)
+stepwise_logit_epl <- step(logit_epl)
+summary(stepwise_logit_epl)
+
+#predict multinomial logistic regression
+
+predict_logit_epl <- predict(stepwise_logit_epl,newdata=test_epl,type="class")
+true_logit <- epl_data2$result
+confusion_logit_epl <- confusionMatrix(predict_logit_epl,true_logit)
+confusion_logit_epl
