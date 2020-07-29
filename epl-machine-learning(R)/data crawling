@@ -1,0 +1,241 @@
+#web crawling epl a single season 
+
+#download package
+
+install.packages("dplyr")
+install.packages("rvest")
+install.packages("RSelenium")
+
+
+library(rvest)
+library(RSelenium)
+library(dplyr)
+
+
+
+#chrome remote driver
+
+ch <- wdman::chrome(port=4576L)
+remDr <- remoteDriver(port=4576L,browserName='chrome')
+remDr$open()
+
+#url season code1,2,3
+
+code_data_frame <- read.csv("season_code_3.csv",header=F) #code 파일명 변경해서 사용 
+code1 <- code_data_frame$V1
+code2 <- code_data_frame$V2
+code3 <- code_data_frame$V3
+code4 <- code_data_frame$V4
+
+#remove NA value
+code4 <- na.omit(code4)
+length(code4) #80 matches
+
+code <- append(code1,code2)
+code <- append(code,code3)
+code <- append(code,code4)
+length(code) #380 matches
+
+#url season code4,5
+
+code_data_frame2 <- read.csv("season_code_5.csv",header=F)  #code 파일명 변경해서 사용 
+code <- code_data_frame2$V1
+
+#create blank season data frame
+
+data_frame_match_final <- data.frame()
+
+for (i in 1:380)
+{
+
+#create url
+  
+  url <- sprintf("http://www.whoscored.com/Matches/%d/Live/",code[i])
+
+#read url for rvest
+
+remDr$navigate(url)
+html <- remDr$getPageSource() %>% `[[`(1)  #read html by Rselenium
+html_rvest <- read_html(html) #read html by rvest
+
+#find data - team name
+
+data_team_name <- html_nodes(html_rvest,'.team-link') %>% html_text()
+
+home_team_name <- data_team_name[1]
+away_team_name <- data_team_name[2]
+
+#find data - score
+
+data_score <- html_nodes(html_rvest,'.result') %>% html_text()
+
+#nchar(data_score) - value of character
+
+home_team_goals <- as.numeric(substr(data_score,1,1))
+away_team_goals <- as.numeric(substr(data_score,5,5))
+
+#find data - 16 basic total value
+
+#######remote move mouse point to chalkboard########
+location_chalkboard <- remDr$findElements('css','#live-match-options > li:nth-child(3) > a') 
+remDr$mouseMoveToLocation(webElement = location_chalkboard[[1]])
+remDr$click()
+########################################
+
+location_home_data <- remDr$findElements('xpath','//*[(@id = "event-type-filters")]//*[contains(concat( " ", @class, " " ), concat( " ", "filterz-value", " " )) and (((count(preceding-sibling::*) + 1) = 1) and parent::*)]')
+
+home_data_list <- lapply(location_home_data,function(x){x$getElementText()})
+home_data_list <- unlist(home_data_list)
+home_data_list <- as.numeric(home_data_list)
+
+location_away_data <- remDr$findElements('css','span+ .filterz-value')
+
+away_data_list <- lapply(location_away_data,function(x){x$getElementText()})
+away_data_list <- unlist(away_data_list)
+away_data_list <- as.numeric(away_data_list)
+
+######################################################
+
+
+#find data - shots on target
+
+#######remote move mouse point to shots########
+location_shots <- remDr$findElements('xpath','//*[contains(concat( " ", @class, " " ), concat( " ", "filterz-option", " " )) and (((count(preceding-sibling::*) + 1) = 1) and parent::*)]') 
+
+remDr$mouseMoveToLocation(webElement = location_shots[[1]])
+remDr$click()
+
+######################################################
+location_shots_on_target_home <- remDr$findElements('xpath','//*[@id="chalkboard"]/div[2]/div[1]/div[2]/div[3]/span[1]')
+
+shots_on_target_data_home <- lapply(location_shots_on_target_home,function(x){x$getElementText()})
+
+shots_on_target_data_home <- unlist(shots_on_target_data_home)
+shots_on_target_data_home <- as.numeric(shots_on_target_data_home)
+
+location_shots_on_target_away <- remDr$findElements('xpath','//*[@id="chalkboard"]/div[2]/div[1]/div[2]/div[3]/span[2]')
+
+shots_on_target_data_away <- lapply(location_shots_on_target_away,function(x){x$getElementText()})
+
+shots_on_target_data_away <- unlist(shots_on_target_data_away)
+shots_on_target_data_away <- as.numeric(shots_on_target_data_away)
+######################################################
+
+
+#find data - long pass
+
+#######remote move mouse point to passes########
+location_pass <- remDr$findElements('xpath','//*[contains(concat( " ", @class, " " ), concat( " ", "filterz-option", " " )) and (((count(preceding-sibling::*) + 1) = 2) and parent::*)]//h4')
+
+remDr$mouseMoveToLocation(webElement = location_pass[[1]])
+remDr$click()
+
+######################################################
+location_long_pass_home <- remDr$findElements('xpath','//*[@id="chalkboard"]/div[2]/div[3]/div[2]/div[2]/span[1]')
+
+data_long_pass_home <- lapply(location_long_pass_home,function(x){x$getElementText()})
+
+data_long_pass_home <- unlist(data_long_pass_home)
+data_long_pass_home <- as.numeric(data_long_pass_home)
+
+location_long_pass_away <- remDr$findElements('xpath','//*[@id="chalkboard"]/div[2]/div[3]/div[2]/div[2]/span[2]')
+
+data_long_pass_away <- lapply(location_long_pass_away,function(x){x$getElementText()})
+
+data_long_pass_away <- unlist(data_long_pass_away)
+data_long_pass_away <- as.numeric(data_long_pass_away)
+######################################################
+
+#find data - successful dribble
+
+#######remote move mouse point to chalkboard########
+location_dribble <- remDr$findElements('xpath','//*[contains(concat( " ", @class, " " ), concat( " ", "filterz-option", " " )) and (((count(preceding-sibling::*) + 1) = 3) and parent::*)]//h4')
+
+remDr$mouseMoveToLocation(webElement = location_dribble[[1]])
+remDr$click()
+
+######################################################
+
+location_dribble_home <- remDr$findElements('xpath','//*[@id="chalkboard"]/div[2]/div[5]/div/div[2]/span[1]')
+
+data_dribble_home <- lapply(location_dribble_home,function(x){x$getElementText()})
+
+data_dribble_home <- unlist(data_dribble_home)
+data_dribble_home <- as.numeric(data_dribble_home)
+
+location_dribble_away <- remDr$findElements('xpath','//*[@id="chalkboard"]/div[2]/div[5]/div/div[2]/span[2]')
+
+data_dribble_away <- lapply(location_dribble_away,function(x){x$getElementText()})
+
+data_dribble_away <- unlist(data_dribble_away)
+data_dribble_away <- as.numeric(data_dribble_away)
+######################################################
+
+
+#find data - successful tackles
+
+#######remote move mouse point to tackles attempted########
+location_tackles <- remDr$findElements('xpath','//*[contains(concat( " ", @class, " " ), concat( " ", "filterz-option", " " )) and (((count(preceding-sibling::*) + 1) = 4) and parent::*)]//h4')
+
+remDr$mouseMoveToLocation(webElement = location_tackles[[1]])
+remDr$click()
+
+######################################################
+
+location_tackles_home <- remDr$findElements('xpath','//*[@id="chalkboard"]/div[2]/div[7]/div/div[2]/span[1]')
+
+data_tackles_home <- lapply(location_tackles_home,function(x){x$getElementText()})
+
+data_tackles_home <- unlist(data_tackles_home)
+data_tackles_home <- as.numeric(data_tackles_home)
+
+location_tackles_away <- remDr$findElements('xpath','//*[@id="chalkboard"]/div[2]/div[7]/div/div[2]/span[2]')
+
+data_tackles_away <- lapply(location_tackles_away,function(x){x$getElementText()})
+
+data_tackles_away <- unlist(data_tackles_away)
+data_tackles_away <- as.numeric(data_tackles_away)
+######################################################
+
+#find data - turnover loss of possession
+
+#######remote move mouse point to loss of possession########
+location_turnover <- remDr$findElements('xpath','//*[@id="event-type-filters"]/li[12]/a/h4')
+
+remDr$mouseMoveToLocation(webElement = location_turnover[[1]])
+remDr$click()
+
+######################################################
+location_turnover_home <- remDr$findElements('xpath','//*[@id="chalkboard"]/div[2]/div[23]/div/div[3]/span[1]')
+
+data_turnover_home <- lapply(location_turnover_home,function(x){x$getElementText()})
+
+data_turnover_home <- unlist(data_turnover_home)
+data_turnover_home <- as.numeric(data_turnover_home)
+
+location_turnover_away <- remDr$findElements('xpath','//*[@id="chalkboard"]/div[2]/div[23]/div/div[3]/span[2]')
+
+data_turnover_away <- lapply(location_turnover_away,function(x){x$getElementText()})
+
+data_turnover_away <- unlist(data_turnover_away)
+data_turnover_away <- as.numeric(data_turnover_away)
+###############################################################
+
+
+
+#create data frame
+
+#result>>> home team win : 1, lose:-1 draw:0 
+
+data_frame_match <- data.frame('home'=home_team_name,'home_scores'=home_team_goals,'home_total_shots'=home_data_list[1],'home_shots_on_target'=shots_on_target_data_home,'home_total_passes'=home_data_list[2],'home_long_passes'=data_long_pass_home,'home_total_dribbles'=home_data_list[3],'home_successful_dribbles'=data_dribble_home,'home_total_tackles'=home_data_list[4],'home_successful_tackles'=data_tackles_home,'home_total_interceptions'=home_data_list[5],'home_total_clearances'=home_data_list[6],'home_total_blocks'=home_data_list[7],'home_total_offsides'=home_data_list[8],'home_total_fouls'=home_data_list[9],'home_total_aerial_duels'=home_data_list[10],'home_total_touches'=home_data_list[11],'home_total_loss_of_possession'=home_data_list[12],'home_turnover'=data_turnover_home,'home_total_errors'=home_data_list[13],'home_total_saves'=home_data_list[14],'home_total_claims'=home_data_list[15],'home_total_punches'=home_data_list[16],'away'=away_team_name,'away_scores'=away_team_goals,'away_total_shots'=away_data_list[1],'away_shots_on_target'=shots_on_target_data_away,'away_total_passes'=away_data_list[2],'away_long_passes'=data_long_pass_away,'away_total_dribbles'=away_data_list[3],'away_successful_dribbles'=data_dribble_away,'away_total_tackles'=away_data_list[4],'away_successful_tackles'=data_tackles_away,'away_total_interceptions'=away_data_list[5],'away_total_clearances'=away_data_list[6],'away_total_blocks'=away_data_list[7],'away_total_offsides'=away_data_list[8],'away_total_fouls'=away_data_list[9],'away_total_aerial_duels'=away_data_list[10],'away_total_touches'=away_data_list[11],'away_total_loss_of_possession'=away_data_list[12],'away_turnover'=data_turnover_away,'away_total_errors'=away_data_list[13],'away_total_saves'=away_data_list[14],'away_total_claims'=away_data_list[15],'away_total_punches'=away_data_list[16],'result'=ifelse(home_team_goals>away_team_goals,1,ifelse(home_team_goals==away_team_goals,0,-1)))
+
+data_frame_match_final <- rbind(data_frame_match_final,data_frame_match)
+
+}
+
+#Is there NA value in data frame? #if there is NA value, write down value to excel file yourself
+table(is.na(data_frame_match_final))
+
+#create csv file
+
+write.csv(data_frame_match_final,'epl_match_2017_2018.csv') #파일명 변경해서 저장
