@@ -1,0 +1,49 @@
+#워드클라우드 그리기
+
+#필요한 라이브러리 불러오기
+from konlpy.tag import Twitter #한글형태소 분석
+from collections import Counter #리스트 원소 빈도수 세기위한 라이브러리
+from wordcloud import WordCloud #워드클라우드 생성하기 위한 라이브러리
+import copy #혹시모를일을 대비하기 위한 요소 복제 라이브러리
+
+#deepcopy를 이용하여 혹시 모를 데이터 손실을 위해 복제를 한다
+#deepcopy를 하면 title_copy를 조작해도 title에 손실이 없다
+#title_copy=title을 하면 title_copy에 조작하는경우 title에도 조작되어 손실가능성이 있다
+
+title_copy=copy.deepcopy(title)
+
+t=Twitter() #객체 생성
+
+#텍스트 데이터의 필요없는 부분인 제목의 말머리 제거
+new_title_copy=[]
+for i in title_copy:
+    new_title_copy.append(i[4:])
+    
+ 
+#제목 데이터의 명사를 분석하여 새로운 리스트에 넣어두기
+title_noun_list=[]
+for i in new_title_copy:
+    title_noun_list.extend(t.nouns(i))
+    
+#명사로 분석된 데이터의 빈도수를 센다
+count_noun_list=Counter(title_noun_list)
+
+
+#의미없다고 생각되는 데이터는 제거한다
+for i in title_noun_list:
+    if i == '더':
+        title_noun_list.remove(i)
+        
+        
+       
+#워드클라우드 객체 생성 
+wc=WordCloud(font_path='c:/Windows/Fonts/malgun.ttf',background_color='white',height=800,width=800)
+ 
+#명사리스트에서 가장 빈도수가 높은 100개의 단어만 추출
+#모든 단어를 보고싶다면 사용하지 않아도 된다
+most_noun_list=count_noun_list.most_common(100)
+
+#워드클라우드 생성
+wc.generate_from_frequencies(dict(most_noun_list))
+wc.to_file('mostimagesports.png')
+
