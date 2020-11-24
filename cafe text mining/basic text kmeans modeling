@@ -1,0 +1,155 @@
+#텍스트 제목의 범주를 분류하는 모델
+#제목의 범주는 축구,e스포츠,농구,야구,기타
+
+#
+#kmeans clustering
+
+#필요한 라이브러리를 불러옵니다
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.cluster import KMeans
+
+#제목 데이터의 벡터화
+title_vec = CountVectorizer()
+title_x    = title_vec.fit_transform(title_copy)
+
+#kmeans clustering 모델 적합
+#제목의 범주가 5개이므로 k값을 5로 사용
+title_kmeans = KMeans(n_clusters = 5).fit(title_x)
+
+#구분된 범주 확인
+#kmeans 특성상 적합시킬때마다 랜덤으로 적합됨
+title_kmeans.labels_
+
+#모델링 평가
+#비지도학습의 모델링을 평가하는 것은 사실 쉽지않다
+
+#구분된 범주 빈도수를 확인
+Counter(list(title_kmeans.labels_))
+
+#실제 정답인 범주 빈도수와 비교
+#사실 이렇게 비교하는 것은 큰 의미는 없다
+#비지도학습의 특성상 kmeans clustering에 의해 구분된 범주와 정답인 범주가 정확히 같다는 보장이 없기 때문
+
+for i in title_copy: #말머리가 없는 데이터 제거
+    if i[0]!='[':
+        title_copy.remove(i)
+
+title_copy_tag=[]
+#enumerate(title_copy)하면 오류날수 있다 원본을 이용하여 반복문을 iteration한다
+for i,v in enumerate(title): #텍스트 데이터의 말머리를 이용하여 정답인 범주를 알아내 새로운 리스트를 작성
+    if v[3] != ']':
+        title_copy_tag.append(v[1:5])
+        title_copy[i]=v[6:]
+    if v[3] == ']':
+        title_copy_tag.append(v[1:3])
+        title_copy[i]=v[4:]
+        
+Counter(title_copy_tag) #정답인 범주 빈도수 확인
+
+#범주의 one hot encoding 작업
+import copy
+title_copy_tag_dummy=copy.deepcopy(title_copy_tag)
+#enumerate(title_copy_tag_dummy)하면 오류날수 있어서 원본을 이용하여 반복문을 iteration
+for i,v in enumerate(title_copy_tag):
+    if v == '축구':
+        title_copy_tag_dummy[i] = 0
+    if v == 'E스포츠':
+        title_copy_tag_dummy[i] = 1
+    if v == '농구':
+        title_copy_tag_dummy[i] = 2
+    if v == '야구':
+        title_copy_tag_dummy[i] = 3
+    if v == '기타':
+        title_copy_tag_dummy[i] = 4
+        
+pd.crosstab(title_kmeans.labels_, title_copy_tag_dummy) #교차분석표 작성 #데이터수가 너무 많으면 컴퓨터 사양에 따라 작성되지 않을 수 있음
+
+#kmeans로 구분한 범주와 실제 정답인 범주와 비교하여 정확도 계산
+answer=0
+for i,j in zip(title_kmeans.labels_,title_copy_tag_dummy):
+    if i == j:
+        answer = answer+1
+accuracy=answer/len(title_copy_tag_dummy)
+print(accuracy)
+
+
+#주성분분석 실시
+#단어 벡터의 차원은 고차원이므로 2차원으로 압축시켜 시각화하기 위함
+from sklearn.decomposition import PCA
+import pandas as pd
+import matplotlib.pyplot as plt
+
+#제목 데이터를 벡터화시킨 데이터를 각 열은 제목값이고 각 행에는 벡터 원소값이 들어간 데이터프레임으로 만든다
+sportstitle_df = pd.DataFrame(title_x.toarray(),
+columns = title_vec.get_feature_names())
+
+#주성분분석 실시
+#2개의 주성분으로 압축시키는 이유는 단어벡터의 차원이 고차원이므로 2차원으로 압축시켜 평면에 시각화하고자함
+title_pca = PCA(n_components = 2)
+title_principalComponents = title_pca.fit_transform(sportstitle_df)
+
+#주성분분석 결과를 데이터프레임으로 생성
+sportstitle_df_pca = pd.DataFrame(data= title_principalComponents,columns = ["PC1", "PC2"])
+
+#주성분분석 결과와 kmeans로 구분된 범주를 이용하여 평면위에 시각화함
+#kmeans로 구분된 범주에 따라 주성분 분석의 1요인,2요인 x,y를 표시함
+#주성분 요인값이 전부 큰 차이 없어서 크게 구분되지 않는다
+#그럼에도 불구하고 kmeans 모델링에 의한 텍스트 데이터 구별은 유의한 분석이 아닌것 같다
+
+plt.scatter(sportstitle_df_pca.iloc[title_kmeans.labels_ == 0, 0],
+
+              sportstitle_df_pca.iloc[title_kmeans.labels_ == 0, 1],
+
+              s       = 10,
+
+              c       = "red",
+
+              label = "Cluster1")
+
+ 
+
+plt.scatter(sportstitle_df_pca.iloc[title_kmeans.labels_ == 1, 0],
+
+              sportstitle_df_pca.iloc[title_kmeans.labels_ == 1, 1],
+
+              s       = 10,
+
+              c       = "blue",
+
+              label = "Cluster2")
+
+ 
+
+plt.scatter(sportstitle_df_pca.iloc[title_kmeans.labels_ == 2, 0],
+
+              sportstitle_df_pca.iloc[title_kmeans.labels_ == 2, 1],
+
+              s       = 10,
+
+              c       = "green",
+
+              label = "Cluster3")
+
+plt.scatter(sportstitle_df_pca.iloc[title_kmeans.labels_ == 3, 0],
+
+              sportstitle_df_pca.iloc[title_kmeans.labels_ == 3, 1],
+
+              s       = 10,
+
+              c       = "pink",
+
+              label = "Cluster4")
+
+plt.scatter(sportstitle_df_pca.iloc[title_kmeans.labels_ == 4, 0],
+
+              sportstitle_df_pca.iloc[title_kmeans.labels_ == 4, 1],
+
+              s       = 10,
+
+              c       = "black",
+
+              label = "Cluster5")
+plt.legend()
+plt.xlim([-0.07, -0.03])
+plt.ylim([-0.08, -0.02]) 
+plt.show()
