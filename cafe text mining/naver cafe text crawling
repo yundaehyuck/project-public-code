@@ -1,0 +1,105 @@
+#필요한 라이브러리를 불러옵니다.
+
+#크롬 버전과 크롬드라이버의 버전이 맞는지 확인해야합니다
+#크롬드라이버는 주피터노트북 실행파일과 동일한 기본경로에 있어야합니다
+
+from selenium import webdriver 
+from bs4 import BeautifulSoup 
+import time #시간지연을 위한 라이브러리
+
+#크롬드라이버로 자동제어를 위한 원하는 페이지를 불러옵니다
+path='chromedriver.exe'
+driver=webdriver.Chrome(path)
+driver.get('https://cafe.naver.com/khantata')
+
+#네이버카페는 iframe을 사용하는 웹페이지입니다.
+#iframe으로 전환한뒤 크롤링 해줘야합니다.
+#여러 페이지를 크롤링하더라도 한번 이동하고나서는 전환하지 않아도 됩니다.
+driver.switch_to.frame('cafe_main')
+html=driver.page_source
+soup=BeautifulSoup(html,'html.parser')
+
+#1페이지는 필요없는 데이터가 존재하므로
+title=[]
+title_list=[i.get_text() for i in soup.find_all(class_='article')]
+#필요없는 특수문자 제거
+title_list=[i.replace(" ",'') for i in title_list]
+title_list=[i.replace('\n','') for i in title_list]
+title_list=[i.replace('\t','') for i in title_list]
+title.extend(title_list[6:]) #필요없는 제목 데이터를 제거하고 빈 리스트에 합쳐넣기
+print(title)
+
+#반복적으로 사용할 제목을 크롤링하는 기본 함수를 정의합니다.
+def basic_crawl_title(title):
+    title_list=[]
+    title_list=[i.get_text() for i in soup.find_all(class_='article')]
+    title_list=[i.replace(" ",'') for i in title_list]
+    title_list=[i.replace('\n','') for i in title_list]
+    title_list=[i.replace('\t','') for i in title_list]
+    title.extend(title_list)
+    return title
+    
+    
+#2페이지부터 10페이지까지 크롤링을 반복합니다.
+#xpath가 11페이지부터 반복적이기때문
+#필요하다면 사양에 따라 중간에 시간지연을 넣어야한다
+for i in range(2,11):
+    xpath='//*[@id="main-area"]/div[6]/a[%d]' %i
+    #다음 페이지로 이동
+    driver.find_element_by_xpath(xpath).click()
+    #페이지 파싱
+    html=driver.page_source
+    soup=BeautifulSoup(html,'html.parser')
+    #제목 크롤링
+    title=basic_crawl_title(title)
+   
+#다음버튼을 눌러 11페이지로 이동하고 파싱한뒤 제목을 크롤링합니다.
+driver.find_element_by_xpath('//*[@id="main-area"]/div[6]/a[11]/span').click()
+html=driver.page_source
+soup=BeautifulSoup(html,'html.parser')
+title=basic_crawl_title(title)
+
+
+#12페이지부터 크롤링하는 반복 기본 함수를 정의합니다
+
+def repeat_crawl_title(title):
+    for i in range(3,13):
+        if len(title) == 50000: #네이버카페는 게시판에서 50000개 데이터 넘게 조회할수없으므로 
+            break
+        
+        xpath='//*[@id="main-area"]/div[6]/a[%d]' %i
+
+        if i == 12: #다음버튼을 클릭하여 다음페이지로 이동하는 부분
+            xpath='//*[@id="main-area"]/div[6]/a[12]/span'
+        #다음 페이지로 이동
+        driver.find_element_by_xpath(xpath).click()
+        time.sleep(1)
+        #페이지 파싱
+        html=driver.page_source
+        soup=BeautifulSoup(html,'html.parser')
+        #제목 크롤링
+        title=basic_crawl_title(title)
+    
+    return title
+
+#게시판의 제목 데이터가 50000개를 넘을것 같은 경우
+#반복하여 게시판의 제목을 크롤링
+#1000페이지 다음페이지를 누르면 1페이지로 이동하기때문에 최대 50000개까지 크롤링가능
+#50000개가되면 반복문을 탈출
+
+while True:
+    title=repeat_crawl_title(title)
+    
+    if len(title) == 50000:
+        break
+
+
+#50000개가 넘지 않을 것 같은 경우
+#12페이지부터 반복적으로 크롤링합니다.
+#에러가 나면 반복문을 탈출합니다.
+
+while True:
+    try:
+        title=repeat_crawl_title(title)
+    except:
+        break
