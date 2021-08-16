@@ -36,6 +36,7 @@ https://drive.google.com/drive/folders/1GEqoDih5kOFwe_BWbg_QCTIpILCWv2hf
 5.Implementation
 ------
 
+1) [Learning to resize images for Computer vision tasks](https://github.com/yundaehyuck/project-public-code/tree/master/Learning%20to%20Resize%20Images%20for%20Computer%20Vision%20Tasks "Learning to resize images for Computer vision tasks")
 ***
 
 6.Deep learning trend search
