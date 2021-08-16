@@ -1,11 +1,15 @@
-# project-public-code
+project-public-code
+=============
 
 This repo is my Machine learning/Deep learning study code repository.
 
 
 Traditional machine learning
+------
+
 
 Deep learning project
+------
 
 1) [Basic image classification](https://github.com/yundaehyuck/project-public-code/tree/master/Basic%20Image%20Classification "Basic image classification")
 
@@ -15,6 +19,10 @@ Deep learning project
 
 4) [Light weight modeling](https://github.com/yundaehyuck/project-public-code/tree/master/Light%20Weight%20Modeling "Light weight modeling")
 
+
 Deep learning trend search
+------
+
 
 Reference
+------
