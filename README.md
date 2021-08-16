@@ -3,6 +3,11 @@ project-public-code
 
 This repo is my Machine learning/Deep learning study code repository.
 
+Study theory
+------
+
+https://drive.google.com/drive/folders/1GEqoDih5kOFwe_BWbg_QCTIpILCWv2hf
+
 
 Traditional machine learning
 ------
