@@ -1,7 +1,7 @@
 project-public-code
 =============
 
-This repo is my Machine learning/Deep learning study code repository.
+**This repo is my Machine learning/Deep learning study code repository.**
 ***
 
 1.Study theory
@@ -42,6 +42,8 @@ https://drive.google.com/drive/folders/1GEqoDih5kOFwe_BWbg_QCTIpILCWv2hf
 ------
 
 1) [Deep neural network for Tabular](https://github.com/yundaehyuck/project-public-code/tree/master/Deep%20neural%20network%20for%20Tabular "Deep neural network for Tabular")
+
+2) [CoTNet](https://github.com/yundaehyuck/project-public-code/tree/master/CoTNet "CoTNet")
 
 ***
 7.Reference
