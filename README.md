@@ -41,6 +41,8 @@ https://drive.google.com/drive/folders/1GEqoDih5kOFwe_BWbg_QCTIpILCWv2hf
 6.Deep learning trend search
 ------
 
+1) [Deep neural network for Tabular](https://github.com/yundaehyuck/project-public-code/tree/master/Deep%20neural%20network%20for%20Tabular "Deep neural network for Tabular")
+
 ***
 7.Reference
 ------
