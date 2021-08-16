@@ -13,9 +13,11 @@ https://drive.google.com/drive/folders/1GEqoDih5kOFwe_BWbg_QCTIpILCWv2hf
 2.Traditional machine learning
 ------
 
-1) [man&woman voice(R)](https://github.com/yundaehyuck/project-public-code/tree/master/man%26woman%20voice(R) "man&woman voice(R)")
+1) [cafe text mining](https://github.com/yundaehyuck/project-public-code/tree/master/cafe%20text%20mining "cafe text mining")
 
-2)
+2) [man&woman voice(R)](https://github.com/yundaehyuck/project-public-code/tree/master/man%26woman%20voice(R) "man&woman voice(R)")
+
+3)
 ***
 
 3.Deep learning project
