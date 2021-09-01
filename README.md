@@ -53,7 +53,7 @@ https://drive.google.com/drive/folders/1GEqoDih5kOFwe_BWbg_QCTIpILCWv2hf
 6.Deep learning trend search
 ------
 
-This directory is for deep learning trend work.
+This directory is for deep learning trend work./n
 It has a base code for a paper, and my experiment and application using base code.
 
 -2021/08
