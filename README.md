@@ -57,7 +57,7 @@ https://drive.google.com/drive/folders/1GEqoDih5kOFwe_BWbg_QCTIpILCWv2hf
 
 2) [CoTNet](https://github.com/yundaehyuck/project-public-code/tree/master/CoTNet "CoTNet")
 
-3) [PonderNet](https://github.com/yundaehyuck/project-public-code/tree/master/PonderNet "PonderNet")
+3) [PonderNet](https://github.com/yundaehyuck/project-public-code/tree/master/Deep%20learning%20trend%20search/2021_08/PonderNet "PonderNet")
 ***
 7.Reference
 ------
