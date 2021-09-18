@@ -41,7 +41,7 @@ https://drive.google.com/drive/folders/1GEqoDih5kOFwe_BWbg_QCTIpILCWv2hf
 
 1) [basic crawling](https://github.com/yundaehyuck/project-public-code/tree/master/basic%20crawling "basic crawling")
 
-2) [ladders-game(python)](https://github.com/yundaehyuck/project-public-code/tree/master/ladders-game(python) "ladders-game(python)")
+2) [ladders-game(python)](https://github.com/yundaehyuck/project-public-code/tree/master/Basic%20study%20code/ladders-game(python) "ladders-game(python)")
 ***
 
 5.Implementation
