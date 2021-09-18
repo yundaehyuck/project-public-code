@@ -39,9 +39,19 @@ https://drive.google.com/drive/folders/1GEqoDih5kOFwe_BWbg_QCTIpILCWv2hf
 4.Basic study code
 ------
 
+Learn about data science basic skills
+
 1) [basic crawling](https://github.com/yundaehyuck/project-public-code/tree/master/Basic%20study%20code/basic%20crawling "basic crawling")
 
+- open data web page dynamic and automatic crawling using selenium
+
 2) [ladders-game(python)](https://github.com/yundaehyuck/project-public-code/tree/master/Basic%20study%20code/ladders-game(python) "ladders-game(python)")
+
+- automatic simulation NAVER ladders game using OCR crawling
+ 
+3) [DALI](https://github.com/yundaehyuck/project-public-code/tree/master/Basic%20study%20code/DALI "DALI")
+
+- How to speed up your model using NVIDIA Data Loading Library
 ***
 
 5.Implementation
