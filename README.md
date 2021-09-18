@@ -39,7 +39,7 @@ https://drive.google.com/drive/folders/1GEqoDih5kOFwe_BWbg_QCTIpILCWv2hf
 4.Basic study code
 ------
 
-1) [basic crawling](https://github.com/yundaehyuck/project-public-code/tree/master/basic%20crawling "basic crawling")
+1) [basic crawling](https://github.com/yundaehyuck/project-public-code/tree/master/Basic%20study%20code/basic%20crawling "basic crawling")
 
 2) [ladders-game(python)](https://github.com/yundaehyuck/project-public-code/tree/master/Basic%20study%20code/ladders-game(python) "ladders-game(python)")
 ***
