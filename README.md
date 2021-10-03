@@ -10,6 +10,8 @@ project-public-code
 ------
 
 https://drive.google.com/drive/folders/1GEqoDih5kOFwe_BWbg_QCTIpILCWv2hf
+
+https://deepdata.tistory.com/
 ***
 
 2.Traditional machine learning
