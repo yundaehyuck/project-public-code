@@ -30,7 +30,7 @@ https://deepdata.tistory.com/
 3.Deep learning project
 ------
 
-1) [Basic image classification](https://github.com/yundaehyuck/project-public-code/tree/master/Basic%20Image%20Classification "Basic image classification")
+1) [Basic image classification](https://github.com/yundaehyuck/project-public-code/tree/master/Deep%20learning%20project/Basic%20Image%20Classification "Basic image classification")
 
 2) [Stuructured data analysis](https://github.com/yundaehyuck/project-public-code/tree/master/Structured%20Data%20Analysis "Stuructured data analysis")
 
