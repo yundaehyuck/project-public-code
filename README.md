@@ -34,7 +34,7 @@ https://deepdata.tistory.com/
 
 2) [Stuructured data analysis](https://github.com/yundaehyuck/project-public-code/tree/master/Structured%20Data%20Analysis "Stuructured data analysis")
 
-3) [Machine reading comprehension](https://github.com/yundaehyuck/project-public-code/tree/master/Machine%20Reading%20Comprehension "Machine reading comprehension")
+3) [Machine reading comprehension](https://github.com/yundaehyuck/project-public-code/tree/master/Deep%20learning%20project/Machine%20Reading%20Comprehension "Machine reading comprehension")
 
 4) [Light weight modeling](https://github.com/yundaehyuck/project-public-code/tree/master/Deep%20learning%20project/Light%20Weight%20Modeling "Light weight modeling")
 
