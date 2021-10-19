@@ -38,6 +38,8 @@ https://deepdata.tistory.com/
 
 4) [Light weight modeling](https://github.com/yundaehyuck/project-public-code/tree/master/Deep%20learning%20project/Light%20Weight%20Modeling "Light weight modeling")
 
+5) [document summarization](https://github.com/yundaehyuck/project-public-code/tree/master/Deep%20learning%20project/LG%20document%20summarization "LG document summarization")
+
 ***
 
 4.Basic study code
