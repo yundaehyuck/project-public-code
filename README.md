@@ -36,7 +36,7 @@ https://deepdata.tistory.com/
 
 3) [Machine reading comprehension](https://github.com/yundaehyuck/project-public-code/tree/master/Machine%20Reading%20Comprehension "Machine reading comprehension")
 
-4) [Light weight modeling](https://github.com/yundaehyuck/project-public-code/tree/master/Light%20Weight%20Modeling "Light weight modeling")
+4) [Light weight modeling](https://github.com/yundaehyuck/project-public-code/tree/master/Deep%20learning%20project/Light%20Weight%20Modeling "Light weight modeling")
 
 ***
 
