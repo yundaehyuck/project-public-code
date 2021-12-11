@@ -19,6 +19,8 @@ https://deepdata.tistory.com/
 
 1) [cafe text mining](https://github.com/yundaehyuck/project-public-code/tree/master/cafe%20text%20mining "cafe text mining")
 
+- learning naver cafe data crawling, text mining, visualizing text data
+
 2) [epl-machine-learning(R)](https://github.com/yundaehyuck/project-public-code/tree/master/epl-machine-learning(R) "epl-machine-learning(R)")
 
 3) [kaggle/titanic](https://github.com/yundaehyuck/project-public-code/tree/master/kaggle/Titanic "kaggle/titanic")
