@@ -43,7 +43,8 @@ https://deepdata.tistory.com/
 5) [document summarization](https://github.com/yundaehyuck/project-public-code/tree/master/Deep%20learning%20project/LG%20document%20summarization "LG document summarization")
 
 6) [document summarization2](https://github.com/yundaehyuck/project-public-code/tree/master/Deep%20learning%20project/Gas%20document%20summarization "Gas document summarization")
-7) [](https://github.com/yundaehyuck/project-public-code/tree/master/Deep%20learning%20project/College%20Scholastic%20Ability%20Test%20English%20Multiple%20choices%20task)
+
+7) [College Scholastic Ability Test English Multiple choices task](https://github.com/yundaehyuck/project-public-code/tree/master/Deep%20learning%20project/College%20Scholastic%20Ability%20Test%20English%20Multiple%20choices%20task)
 ***
 
 4.Basic study code
