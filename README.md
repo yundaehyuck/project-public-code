@@ -25,6 +25,10 @@ https://deepdata.tistory.com/
 
 3) [man&woman voice(R)](https://github.com/yundaehyuck/project-public-code/tree/master/man%26woman%20voice(R) "man&woman voice(R)")
 
+4) [ladders-game(python)](https://github.com/yundaehyuck/project-public-code/tree/master/Basic%20study%20code/ladders-game(python) "ladders-game(python)")
+
+- automatic simulation NAVER ladders game using OCR crawling
+
 ***
 
 3.Deep learning project
